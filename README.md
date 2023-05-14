@@ -22,9 +22,9 @@ composer install
 ```
 
 ### Generate an application key using the following command:
-
+```sh
 php artisan key:generate
-Create a new database for your project and update the .env file with your database credentials.
+```
 
 ### Run the database migrations:
 ```sh  
