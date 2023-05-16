@@ -14,8 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function () {
+Route::prefix('teacher')->group(function () {
     Route::get('/', [App\Http\Controllers\TeacherController::class, 'index'])->name('teacher');
 });
+
+
 Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
