@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +18,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function () {
-    Route::get('/', [App\Http\Controllers\TeacherController::class, 'index'])->name('teacher');
+    Route::get('/', [TeacherController::class, 'index'])->name('teacher');
 });
 Auth::routes();
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get("/student", function (){
+   return view('student.studentGUI');
+});
+
+
+Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
+Route::post('/questions/get-random-question', [QuestionController::class, 'getRandomQuestion'])->name('getRandomQuestion');
+Route::post('/assignments/update', [QuestionController::class, 'update'])->name('assignments.update');
+
+
+
+
+
+
