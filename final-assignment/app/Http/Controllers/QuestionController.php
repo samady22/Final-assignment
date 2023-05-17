@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\DB;
 class QuestionController extends Controller
 {
 
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function update(Request $request)
     {
         $assignmentId = $request->input('assignment_id');
