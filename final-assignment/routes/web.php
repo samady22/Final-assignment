@@ -22,10 +22,6 @@ Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function () {
 });
 Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get("/student", function (){
-   return view('student.studentGUI');
-});
-
 
 Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
 Route::post('/questions/get-random-question', [QuestionController::class, 'getRandomQuestion'])->name('getRandomQuestion');

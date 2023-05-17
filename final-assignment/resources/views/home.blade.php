@@ -15,6 +15,9 @@
                     @endif
                     {{ __('You are logged in!') }}
                 </div>
+                <div class="d-flex m-3 justify-content-evenly">
+                    <a role="button" href="/questions" class="btn btn-outline-primary">Student GUI</a>
+                </div>
             </div>
         </div>
     </div>

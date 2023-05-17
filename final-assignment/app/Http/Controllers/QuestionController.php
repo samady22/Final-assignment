@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 class QuestionController extends Controller
 {
 
+
     public function update(Request $request)
     {
         $assignmentId = $request->input('assignment_id');
@@ -21,6 +22,7 @@ class QuestionController extends Controller
         $assignment = Assignment::findOrFail($assignmentId);
         $assignment->answer = $answer;
         $assignment->status = 'submitted';
+        $assignment->points = 3;
         $assignment->save();
 
         return redirect()->back()->with('success', 'Answer updated successfully.');

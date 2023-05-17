@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 border-right border-left border-success">
+            <div class="col-md-8 border-right  border-success">
                 <h3 class="h3">Select files to generate task</h3>
                 <form id="fileSelectionForm" action="{{ route('getRandomQuestion') }}" method="POST">
                     @csrf
@@ -35,9 +35,9 @@
             <div class="col-md-12">
                 <h3 class="h3 text-center">All Assignments of <span class="text-secondary rounded p-1">{{$user}}</span></h3>
                 <hr>
-                <div class="row">
+                <div class="row ">
                     @foreach ($assignments as $index => $assignment)
-                        <div class="card {{ $assignment->status === 'submitted' ? 'bg-success' : 'bg-danger' }} m-2" style="width: 12rem;">
+                        <div class="card {{ $assignment->status === 'submitted' ? 'bg-success' : 'bg-danger' }} m-2" style="width: 13rem;">
                             <div class="card-body text-center">
                                 <h5 class="card-title text-light">Task {{ $index + 1 }}</h5>
                                 <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal{{ $assignment->id }}">
