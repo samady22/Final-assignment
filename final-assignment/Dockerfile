@@ -15,8 +15,6 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# RUN docker run --name my-mysql-container -e MYSQL_ROOT_PASSWORD=my-secret-pw -e MYSQL_USER=my-username -e MYSQL_PASSWORD=my-password -e MYSQL_DATABASE=my-database -p 3306:3306 -d mysql
-
 # Copy the Laravel project files to the container
 COPY . .
 
