@@ -20,7 +20,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function () {
     Route::get('/', [TeacherController::class, 'index'])->name('teacher');
 
-    //here
+    Route::post('/tasks/update/{id}', [App\Http\Controllers\TaskController::class, 'updateTasks'])->name('tasks.update');
+    Route::get('/chart', [App\Http\Controllers\TaskController::class, 'displayStudentTable'])->name('tasks.displayStudentTable');
+    Route::get('/chart/{id}', [App\Http\Controllers\TaskController::class, 'displayStudentTasks'])->name('tasks.displayStudentsTasks');
 });
 Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home');
