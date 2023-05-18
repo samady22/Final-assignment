@@ -46,7 +46,9 @@
       </thead>
       <tbody>
           @foreach ($users as $user)
+          @if($user->role == 'student')
           <tr>
+             
               <td><a href="chart/{{ $user->id }}">{{ $user->name }}</a></td>
               <td>{{ $user->id }}</td>
               @if ($user->assignments->isNotEmpty())
@@ -74,6 +76,7 @@
               
               @endif
           </tr>
+          @endif
           @endforeach
       </tbody>
   </table>
