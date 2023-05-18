@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('image_path')->nullable(true);
             $table->string('solution', 1000)->nullable(true);
             $table->string('answer')->nullable(true);
-            $table->string('status')->nullable(true);
+            $table->integer('status')->nullable(true);
             $table->integer('points')->nullable(true);
             $table->timestamps();
         });

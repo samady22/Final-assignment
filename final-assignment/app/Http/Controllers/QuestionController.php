@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 
 class QuestionController extends Controller
@@ -24,39 +26,52 @@ class QuestionController extends Controller
 
         $assignment = Assignment::findOrFail($assignmentId);
         $assignment->answer = $answer;
-        $assignment->status = 'submitted';
+        $assignment->status = 1;
         $assignment->points = 3;
         $assignment->save();
 
         return redirect()->back()->with('success', 'Answer updated successfully.');
     }
 
+
     public function index()
     {
         $latexFileNames = [];
-        $assignments = Assignment::all();
+        $assignments  = Assignment::where('student_id', Auth::user()->id)->get();
         $user = Auth::user()->name;
 
         if (Schema::hasTable('tasks')) {
             $tasks = DB::table('tasks')
                 ->where('available', 1)
-                ->whereDate('dateFrom', '<=', now())
-                ->whereDate('dateTo', '>=', now())
+                ->where(function ($query) {
+                    $now = Carbon::now();
+                    $query->where(function ($subquery) use ($now) {
+                        $subquery->whereNull('dateFrom')
+                            ->whereNull('dateTo');
+                    })
+                        ->orWhere(function ($subquery) use ($now) {
+                            $subquery->whereDate('dateFrom', '<=', $now)
+                                ->whereDate('dateTo', '>=', $now);
+                        });
+                })
                 ->get();
 
+
             foreach ($tasks as $task) {
-                $filePath = storage_path('app/questions/' . $task->file);
-                if (File::exists($filePath)) {
+//                $filePath = Storage::path('questions/' . $task->file);
+//                if (Storage::exists($filePath)) {
                     $latexFileNames[] = $task->file;
-                }
+//                }
             }
         }
 
         if (empty($latexFileNames)) {
-            $latexFiles = File::files(storage_path('app/public/questions'));
+            $latexFiles = Storage::files('public/questions');
             foreach ($latexFiles as $file) {
-                $latexFileNames[] = $file->getFilename();
+                $filename = basename($file);
+                $latexFileNames[] = $filename;
             }
+
         }
 
         return view('questions.index', compact('latexFileNames', 'assignments', 'user'));
@@ -78,7 +93,7 @@ class QuestionController extends Controller
                 $assignment->question = $randomQuestion->question;
                 $assignment->solution = $randomQuestion->solution;
                 $assignment->image_path = $randomQuestion->image;
-                $assignment->status = 'not-submitted';
+                $assignment->status = 0;
                 $assignment->points = 0;
                 $assignment->save();
 
@@ -95,7 +110,7 @@ class QuestionController extends Controller
 
     private function extractQuestions($filePath)
     {
-        $fileContents = file_get_contents(storage_path('app/public/' . $filePath));
+        $fileContents = Storage::get('public/' . $filePath);
         $pattern = '/\\\\begin{task}(.*?)\\\\end{task}(.*?)\\\\begin{solution}(.*?)\\\\end{solution}/s';
         preg_match_all($pattern, $fileContents, $matches, PREG_SET_ORDER);
 
@@ -109,7 +124,7 @@ class QuestionController extends Controller
 
             $imageName = isset($imageMatch[1]) ? $imageMatch[1] : null;
             $imageName = basename($imageName); // Extract only the image name without the path
-            $image = $imageName ? $imageName : null;
+            $image = $imageName ? $imageName: null;
 
             // Remove the \includegraphics{} tag from the question
             $question = preg_replace($imagePattern, '', $question);
@@ -123,4 +138,5 @@ class QuestionController extends Controller
 
         return $questions;
     }
+
 }
