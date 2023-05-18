@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function () {
     Route::get('/', [TeacherController::class, 'index'])->name('teacher');
+
+    //here
 });
 Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home');
