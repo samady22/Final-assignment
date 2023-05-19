@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date("dateFrom")->nullable();
             $table->date("dateTo")->nullable();
             $table->integer("points")->default(10);
-            $table->json("tasks")->default("[]");
+            $table->json("tasks");
             $table->string("file")->default("");
             $table->timestamps();
         });
