@@ -25,14 +25,10 @@ Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function () {
     Route::get('/chart/{id}', [App\Http\Controllers\TaskController::class, 'displayStudentTasks'])->name('tasks.displayStudentsTasks');
 });
 Auth::routes();
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
+Route::get('/', function () {
+    return view('intro');
+});
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
 Route::post('/questions/get-random-question', [QuestionController::class, 'getRandomQuestion'])->name('getRandomQuestion');
 Route::post('/assignments/update', [QuestionController::class, 'update'])->name('assignments.update');
-
-
-
-
-
-

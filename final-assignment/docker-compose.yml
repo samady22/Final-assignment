@@ -1,18 +1,25 @@
+# The code specifies a version "3" for the services being defined.
 version: "3"
+
 services:
+    # The "app" service is being built using a Dockerfile in the current directory.
     app:
         build:
             context: .
             dockerfile: Dockerfile
+        # The app service will be accessible on port 8000 and will map to port 8000 inside the container.
         ports:
             - "8000:8000"
+        # The current directory will be mounted as a volume inside the container at /var/www/.
         volumes:
             - .:/var/www/
+        # The app service depends on the "database" service.
         depends_on:
             - database
-
+    # The "database" service uses the MySQL version 8.0 image.
     database:
         image: mysql:8.0
+        # The MySQL database will be accessible on port 3306 and will map to port 3306 inside the container.
         ports:
             - 3306:3306
         environment:
@@ -20,8 +27,9 @@ services:
             - MYSQL_USER=${DB_USERNAME}
             - MYSQL_PASSWORD=${DB_PASSWORD}
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        # A volume named "db-data" is defined to store the MySQL data.
         volumes:
             - db-data:/var/lib/mysql
-
+# The "db-data" volume is not specified explicitly, using the default configuration.
 volumes:
     db-data: ~
